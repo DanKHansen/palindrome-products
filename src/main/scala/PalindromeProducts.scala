@@ -1,12 +1,6 @@
 case class PalindromeProducts(i: Int, j: Int):
-   lazy val l: Seq[(Int, Set[(Int, Int)])] = for
-      a <- i to j
-      b <- a to j
-      if (b * a).toString == (b * a).toString.reverse
-   yield (a * b, Set((a, b)))
+   private lazy val l = (for a <- i to j; b <- a to j; if a * b == (a * b).toString.reverse.toInt
+   yield (a * b, (a, b))).groupMap(_._1)(_._2)
 
-   val smallest: Option[(Int, Set[(Int, Int)])] =
-      if l.nonEmpty then Some(l.minBy(_._1)) else None
-
-   val largest: Option[(Int, Set[(Int, Int)])] =
-      if l.nonEmpty then Some((l.maxBy(_._1)._1, l.distinct.groupBy(_._1).maxBy(_._1)._2.flatMap(_._2).toSet)) else None
+   val smallest: Option[(Int, Set[(Int, Int)])] = l.minByOption(_._1).map((p, pairs) => (p, pairs.toSet))
+   val largest: Option[(Int, Set[(Int, Int)])] = l.maxByOption(_._1).map((p, pairs) => (p, pairs.toSet))
