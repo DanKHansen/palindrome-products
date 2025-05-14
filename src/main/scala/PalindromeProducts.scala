@@ -9,6 +9,5 @@ case class PalindromeProducts(i: Int, j: Int):
       if l.nonEmpty then Some(l.minBy(_._1)) else None
 
    val largest: Option[(Int, Set[(Int, Int)])] = {
-      println(l.groupBy(_._1).values)
-      if l.nonEmpty then Some(l.maxBy(_._1)) else None
+      if l.nonEmpty then Some((l.maxBy(_._1)._1, l.distinct.groupBy(_._1).maxBy(_._1)._2.flatMap(_._2).toSet)) else None
    }
